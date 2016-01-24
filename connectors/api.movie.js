@@ -9,6 +9,11 @@ var urls = {
 
 module.exports = {
 
+    url: {
+        details: urls.details,
+        posters: urls.posters
+    },
+
     getDetails: _getDetails,
     getPosters: _getPosters
 

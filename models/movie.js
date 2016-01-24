@@ -14,7 +14,7 @@ function Movie(str1, str2) {
     this.imdbID = '';
     this.details = {};
     this.posters = [];
-    this.queryString = '';
+    this.string = '';
 
     str1 = str1 || '';
 
@@ -42,9 +42,9 @@ function Movie(str1, str2) {
             }
         },
 
-        queryString: {
+        string: {
             get: function () {
-                return _this.title + ' ' + _this.year;
+                return _this.title + ' (' + _this.year + ')';
             }
         },
 
@@ -114,7 +114,6 @@ function Movie(str1, str2) {
     }
 
 }
-
 
 
 function _makeID(title, year) {

@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Promise = require('promise');
 var request = require('../request');
 var settings = require('../settings');
+
 var omdbURL = settings.urls.omdbAPI;
 
 module.exports = {

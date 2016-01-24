@@ -1,0 +1,19 @@
+{
+  "name": "strmr-common",
+  "version": "1.0.0",
+  "description": "common assets between strmr frontend and backend",
+  "main": "common.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crstffr/strmr-common.git"
+  },
+  "author": "crstffr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crstffr/strmr-common/issues"
+  },
+  "homepage": "https://github.com/crstffr/strmr-common#readme"
+}

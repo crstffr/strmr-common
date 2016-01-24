@@ -4,6 +4,7 @@
   "description": "common assets between strmr frontend and backend",
   "main": "common.js",
   "private": true,
+  "registry": "npm",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

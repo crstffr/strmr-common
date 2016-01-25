@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var Promise = require('promise');
+var fbref = require('../refs/root');
 var users = require('../refs/users');
 var Movie = require('./movie');
 
@@ -49,6 +50,10 @@ function User(authData) {
         }
 
     });
+
+    this.logout = function() {
+        fbref.unauth();
+    };
 
     this.getMovies = function () {
         return new Promise(function (resolve, reject) {

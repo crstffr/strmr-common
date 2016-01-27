@@ -21,7 +21,9 @@
   "dependencies": {
     "firebase": "^2.4.0",
     "lodash": "^4.0.0",
+    "parse-torrent-name": "^0.5.4",
     "promise": "^7.1.1",
+    "query-string": "^3.0.0",
     "rpg": "^0.1.0",
     "string-format": "^0.5.0",
     "superagent": "^1.7.1",

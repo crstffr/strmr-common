@@ -27,13 +27,13 @@ function User(authData) {
 
         email: {
             get: function () {
-                return _this.auth.creds.email
+                return _.get(_this, 'auth.creds.email');
             }
         },
 
         password: {
             get: function () {
-                return _this.auth.creds.password;
+                return _.get(_this, 'auth.creds.password');
             }
         },
 
@@ -53,6 +53,12 @@ function User(authData) {
 
     this.logout = function() {
         fbref.unauth();
+    };
+
+    this.getAuthId = function() {
+        return this.ref.child('authid').once('value').then(function(snap){
+            return snap.val() || Promise.reject('User has no authid');
+        });
     };
 
     this.getMovies = function () {

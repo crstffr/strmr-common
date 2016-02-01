@@ -15,7 +15,7 @@ module.exports = {
  */
 function _url(movieid) {
     var base = 'https://clmx10y474.execute-api.us-east-1.amazonaws.com/development';
-    var url = base + '/movie/{movieid}/details';
+    var url = base + '/movie/{movieid}/posters';
     return format(url, {movieid: movieid});
 }
 

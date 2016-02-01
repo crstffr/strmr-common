@@ -4,6 +4,7 @@ var zeropad = require('../utils/zeropad');
 var cleankey = require('../utils/cleankey');
 var queryString = require('query-string');
 var parseTorrentName = require('parse-torrent-name');
+var Movie = require('./movie');
 
 /**
  *
@@ -11,12 +12,34 @@ var parseTorrentName = require('parse-torrent-name');
  */
 module.exports = Magnet;
 
+/**
+ *
+ * @param {String} link
+ * @constructor
+ */
 function Magnet(link) {
 
     var _this = this;
     var _errors = [];
     var _params = {};
     var _data = {};
+    var _movie = {};
+    var _tvshow = {};
+
+    this.url = '';
+    this.errors = '';
+    this.properties = {};
+
+    this.isTV = false;
+    this.isMovie = false;
+    this.isValid = false;
+
+    this.filename = '';
+    this.filepath = '';
+    this.firekey = '';
+
+    this.tvshow = {};
+    this.movie = {};
 
     try {
 
@@ -65,8 +88,20 @@ function Magnet(link) {
                 return Boolean(_this.isValid && !_this.isTV);
             }
         },
+        movie: {
+            enumerable: false,
+            get: function() {
+                return (_this.isMovie) ? _movie : null;
+            }
+        },
+        tvshow: {
+            enumerable: false,
+            get: function() {
+                return (_this.isTV) ? _tvshow : null;
+            }
+        },
         filename: {
-            enumerable: true,
+            enumerable: false,
             get: function () {
                 return String((_this.isTV) ? _tvshowFilename() : _movieFilename());
             }
@@ -84,6 +119,16 @@ function Magnet(link) {
             }
         }
     });
+
+
+    if (_this.isMovie) {
+        _movie = new Movie(_data.title, _data.year);
+    }
+
+    if (_this.isTV) {
+        _tvshow = {}; //new Movie(_data.title, _data.year);
+    }
+
 
     function _tvshowFilename() {
         var s, e, r, file;

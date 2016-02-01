@@ -7,6 +7,7 @@ function Current() {
 
     var _user;
 
+    this.magnet = '';
     this.$state = {};
     this.$rootScope = {};
 

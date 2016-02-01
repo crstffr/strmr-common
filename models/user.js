@@ -11,6 +11,13 @@ function User(authData) {
     var _this = this;
     var _data = authData;
 
+    this.id = '';
+    this.ref = {};
+    this.auth = {};
+    this.library = {};
+    this.password = '';
+    this.email = '';
+
     Object.defineProperties(this, {
 
         auth: {

@@ -9,12 +9,12 @@ module.exports = function(options, path, strms, user) {
         body: ''
     });
 
-    var out = '<html>' +
-              '<head><title>{title}</title></head>' +
-              '<body>' +
+    var out = '<html>\n' +
+              '<head><title>{title}</title></head>\n' +
+              '<body bgcolor="white">\n' +
                   '<h1>{header}</h1>' +
                   '{body}' +
-              '</body>' +
+              '</body>\n' +
               '</html>';
 
     return {

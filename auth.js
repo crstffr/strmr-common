@@ -9,15 +9,24 @@ module.exports = new Auth();
 
 function Auth() {
 
-    var _auth = this;
+    var _this = this;
     var _user;
+
+
+    var _valid = new Promise(function(resolve){
+        fbref.onAuth(function (authData) {
+            _user = (_isValid(authData)) ? new User(authData) : null;
+            if (_user) { resolve(_user); }
+        });
+    });
 
     /**
      *
+     * @returns {Promise}
      */
-    fbref.onAuth(function (authData) {
-        _user = (isValid(authData)) ? new User(authData) : null;
-    });
+    this.whenValid = function() {
+        return _valid;
+    };
 
     /**
      *
@@ -31,11 +40,15 @@ function Auth() {
      * @param authData
      * @returns {Boolean}
      */
-    this.isValid = isValid;
+    this.isValid = _isValid;
 
-    function isValid(authData) {
+    function _isValid(authData) {
         return Boolean(authData && authData.provider === 'password');
     }
+
+
+
+
 
     /**
      * Trigger handler only when auth has been established.
@@ -45,8 +58,8 @@ function Auth() {
      */
     this.onAuth = function (fn) {
         return fbref.onAuth(function (authData) {
-            if (_auth.isValid(authData)) {
-                _getCredentials(_user, authData).then(function (creds) {
+            if (_isValid(authData)) {
+                _getCredentials(_user).then(function (creds) {
                     _user.auth.creds = creds;
                     fn(_user);
                 });
@@ -61,7 +74,7 @@ function Auth() {
      */
     this.onUnAuth = function (fn) {
         return fbref.onAuth(function (authData) {
-            if (!_auth.isValid(authData)) {
+            if (!_isValid(authData)) {
                 fn();
             }
         });
@@ -115,7 +128,7 @@ function Auth() {
                         var user = userPass.email;
                         var pass = userPass.password;
 
-                        _auth.withPassword(uid, user, pass).then(function (user) {
+                        _this.withPassword(uid, user, pass).then(function (user) {
                             resolve(user);
                         }).catch(function (err) {
                             reject(err);
@@ -132,25 +145,24 @@ function Auth() {
     /**
      *
      * @param {User} user
-     * @param {Object} authData
      * @returns {Promise}
      * @private
      */
-    function _getCredentials(user, authData) {
+    function _getCredentials(user) {
         return new Promise(function (resolve, reject) {
 
-            if (!isValid(authData)) { reject('authData is invalid'); }
+            if (!_isValid(user.auth)) { reject('authData is invalid'); }
 
             user.getAuthId().then(function (authid) {
                 authRef.child(authid).once('value').then(function (snap) {
                     resolve(snap.val());
                 }).catch(function (err) {
                     console.error(err);
-                    _auth.logout();
+                    _this.logout();
                 });
             }).catch(function (err) {
                 console.error(err);
-                _auth.logout();
+                _this.logout();
             });
         });
     }
@@ -186,11 +198,11 @@ function Auth() {
      * @private
      */
     function _convertToUserPass(authData) {
-        var userRef = authRef.child(authData.uid);
+        var authUserRef = authRef.child(authData.uid);
         return new Promise(function (resolve, reject) {
             var settings = {
                 email: _.kebabCase(authData.uid) + '@strmr.space',
-                password: rpg({length: 60, set: 'lud'})
+                password: rpg({length: 24, set: 'lud'})
             };
             fbref.createUser(settings, function (err, newUser) {
                 if (err) {
@@ -198,10 +210,10 @@ function Auth() {
                 } else {
 
                     settings.uid = newUser.uid;
-                    userRef.set(settings);
+                    authUserRef.set(settings);
 
-                    _auth.onAuth(function (user) {
-                        user.ref.child('authid').set(authData.uid);
+                    _this.whenValid().then(function(user){
+                        user.setAuthId(authData.uid);
                     });
 
                     resolve(settings);

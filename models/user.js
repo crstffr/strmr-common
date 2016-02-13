@@ -9,7 +9,7 @@ module.exports = User;
 function User(authData) {
 
     var _this = this;
-    var _data = authData;
+    var _auth = authData;
 
     this.id = '';
     this.ref = {};
@@ -22,7 +22,7 @@ function User(authData) {
 
         auth: {
             get: function () {
-                return _data;
+                return _auth;
             }
         },
 
@@ -62,6 +62,10 @@ function User(authData) {
         fbref.unauth();
     };
 
+    this.setAuthId = function(authid) {
+        this.ref.child('authid').set(authid);
+    };
+
     this.getAuthId = function() {
         return this.ref.child('authid').once('value').then(function(snap){
             return snap.val() || Promise.reject('User has no authid');
@@ -71,21 +75,19 @@ function User(authData) {
     this.getMovies = function () {
         return new Promise(function (resolve, reject) {
             _this.library.once('value', function (snap) {
-
                 var movies = [];
-
                 _.forEach(snap.val(), function (data) {
                     movies.push(_newMovieFromUserData(data));
                 });
-
                 resolve(movies);
             });
         });
     };
 
-    this.getMovie = function (movieId) {
+    this.getMovie = function (movieid) {
+        movieid = decodeURIComponent(movieid);
         return new Promise(function (resolve, reject) {
-            _this.library.child(movieId).once('value', function (snap) {
+            _this.library.child(movieid).once('value', function (snap) {
                 var data = snap.val();
                 if (data) {
                     resolve(_newMovieFromUserData(data));

@@ -10,16 +10,16 @@ module.exports = {
 /**
  *
  * @param {String} uid
- * @param {String} movieid
- * @param {String} email
+ * @param {String} movie
+ * @param {String} user
  * @param {String} pass
  * @returns {String}
  * @private
  */
-function _url(uid, movieid, email, pass) {
+function _url(uid, movie, user, pass) {
     var base = 'https://clmx10y474.execute-api.us-east-1.amazonaws.com/development';
-    var url = base + '/user/{uid}/movie/{movie}?u={email}&p={pass}';
-    return format(url, {uid: uid, movie: movieid, email: email, pass: pass});
+    var url = base + '/user/{uid}/{u}/{p}/movies/{movie}';
+    return format(url, {uid: uid, movie: movie, u: user, p: pass});
 }
 
 /**

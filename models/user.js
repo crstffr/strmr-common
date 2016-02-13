@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Promise = require('promise');
 var fbref = require('../refs/root');
 var users = require('../refs/users');
+var Magnet = require('./magnet');
 var Movie = require('./movie');
 
 module.exports = User;
@@ -115,7 +116,9 @@ function User(authData) {
         var title = data.properties.title;
         var year = data.properties.year;
         var movie = new Movie(title, year);
-        movie.magnet = data.url;
+        movie.magnet = new Magnet(data.url);
+        movie.getDetails();
+        movie.getPosters();
         return movie;
     }
 

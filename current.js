@@ -12,6 +12,16 @@ function Current() {
     this.$rootScope = {};
 
     Object.defineProperties(this, {
+        title: {
+            get: function() {
+                return (window) ? window.document.title : '';
+            },
+            set: function(title) {
+                if (window) {
+                    window.document.title = 'Strmr' + ((title) ? ': ' + title : '');
+                }
+            }
+        },
         user: {
             get: function(){
                 return _user;

@@ -72,6 +72,19 @@ function User(authData) {
         });
     };
 
+    this.getStrmById = function (movieid) {
+        return new Promise(function (resolve, reject) {
+            _this.library.child(movieid).once('value', function (snap) {
+                var data = snap.val();
+                if (data) {
+                    resolve(data);
+                } else {
+                    reject();
+                }
+            });
+        });
+    };
+
     this.getMovies = function () {
         return new Promise(function (resolve, reject) {
             _this.library.once('value', function (snap) {

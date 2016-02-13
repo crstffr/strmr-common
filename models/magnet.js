@@ -34,6 +34,7 @@ function Magnet(link) {
     this.isMovie = false;
     this.isValid = false;
 
+    this.torrentname = '';
     this.filename = '';
     this.filepath = '';
     this.firekey = '';
@@ -44,7 +45,8 @@ function Magnet(link) {
     try {
 
         _params = queryString.parse(link);
-        _data = parseTorrentName(_params.dn || '');
+        _this.torrentname = _params.dn || '';
+        _data = parseTorrentName(_this.torrentname);
         _data.title = _.startCase(_data.title);
 
     } catch (e) {
